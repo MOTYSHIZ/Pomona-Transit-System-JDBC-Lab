@@ -14,7 +14,7 @@ import java.sql.Statement;
 
 public class CS435JDBCLab {
 	
-	private static String dbHost = "localHost";
+	private static String dbHost = "localhost";
 	private static String dbName = "world";
 	private static String dbUser = "JohnCena";
 	
