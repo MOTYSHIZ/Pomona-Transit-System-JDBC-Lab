@@ -71,12 +71,22 @@ public class CS435JDBCLab {
 	}
 
 	private static void deleteBus() {
-		// TODO Auto-generated method stub
+		String sqlVar;
+		int busID;
+		Scanner in = new Scanner(System.in);
+	
+		System.out.print("BusID: ");	
+		busID = in.nextInt();
+	
+		sqlVar = "DELETE FROM BUS WHERE BusID='" + busID + "';";
+		sqlHandler(sqlVar);
 		
+		System.out.println("Bus deleted!");
+		in.close();
 	}
 
 	private static void addBus() {
-		// INSERT INTO 'pomona_transit'.'bus'('BusID', 'Model', 'Year') VALUES('5', 'Tour', '2013');
+		// INSERT INTO 'pomona_transit'.'bus'('BusID', 'Model', 'Year');
 		String model = "NULL";
 		String sqlVar;
 		int busID = 0;
@@ -108,7 +118,7 @@ public class CS435JDBCLab {
 		System.out.print("DriverName: ");	
 		driverName = in.next();
 		
-		System.out.print("DriverTelephoneNumber: ");
+		System.out.print("DriverTelephoneNumber (Please follow XXX-XXXX format: ");
 		driverTelephoneNumber = in.next();
 		
 		sqlVar = "INSERT INTO DRIVER VALUES('" + driverName + "', '" + driverTelephoneNumber + "');";
