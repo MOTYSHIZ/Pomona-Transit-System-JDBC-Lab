@@ -134,8 +134,8 @@ public class CS435JDBCLab {
 	}
 
 	private static void displayStops() {
-		// TODO Auto-generated method stub
-		
+		String query = "SELECT * FROM TripStopInfo";
+		sqlDisplayer(query);
 	}
 
 	private static void editSchedule() {
@@ -165,36 +165,53 @@ public class CS435JDBCLab {
 			String varSQL = sqlVar;
 			stmt.executeUpdate(varSQL);
 			
-			
-//			/**Can delete beneath this**/
-//			String select = "SELECT * FROM BUS";
-//			ResultSet rs = stmt.executeQuery(select);
-//			//Get meta data on just opened result set
-//			ResultSetMetaData rsMeta = rs.getMetaData();
-//			
-//			// Display Column names as string
-//			String varColNames = "";
-//			int varColCount = rsMeta.getColumnCount();
-//			for(int col = 1; col <= varColCount;col++){
-//				varColNames = varColNames + rsMeta.getColumnName(col)+ " ";
-//			}
-//			System.out.println(varColNames);
-//			
-//			//Display column values
-//			while(rs.next()){
-//				for(int col = 1; col <= varColCount;col++){
-//					System.out.print(rs.getString(col) + " ");
-//				}
-//				System.out.println();
-//			}
-			
-			//Clean up
-//			rs.close();
 			stmt.close();
 			conn.close();
 			
 		} catch(Exception e){
 			e.printStackTrace();
 		}
+	}
+	
+	private static void sqlDisplayer(String query){
+		try{
+			//Load the MySQL Connector / J classes
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			
+			//Set connect string to local MySQL database, user is JohnCena
+			String connString = "jdbc:mysql://" + dbHost + "/" + dbName + 
+					"?user=" + dbUser + "&password=doot"  + "&useSSL=false";
+			
+			System.out.println("Trying connection with " + connString);
+			Connection conn = DriverManager.getConnection(connString);
+			Statement stmt = conn.createStatement();
+
+			String select = query;
+			ResultSet rs = stmt.executeQuery(select);
+			//Get meta data on just opened result set
+			ResultSetMetaData rsMeta = rs.getMetaData();
+			
+			// Display Column names as string
+			String varColNames = "";
+			int varColCount = rsMeta.getColumnCount();
+			for(int col = 1; col <= varColCount;col++){
+				varColNames = varColNames + rsMeta.getColumnName(col)+ " ";
+			}
+			System.out.println(varColNames);
+			
+			//Display column values
+			while(rs.next()){
+				for(int col = 1; col <= varColCount;col++){
+					System.out.print(rs.getString(col) + " ");
+				}
+				System.out.println();
+			}
+			
+			//Clean up
+			rs.close();
+			conn.close();			
+		} catch(Exception e){
+			e.printStackTrace();
+		}	
 	}
 }
