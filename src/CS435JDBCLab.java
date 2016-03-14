@@ -144,8 +144,37 @@ public class CS435JDBCLab {
 	}
 	
 	private static void displayWeeklySchedule() {
-		// TODO Auto-generated method stub
+		// display the weekly schedule of a given driver and date
 		
+		//sort trip offering by given name, then date
+		Scanner in = new Scanner(System.in);
+		System.out.print("Enter in a driver's name: ");
+		String driverName = in.next();
+				
+		System.out.print("Given month(two digits): ");
+		String month = in.next();
+		
+		System.out.print("Given day(two digits): ");
+		int day = in.nextInt();
+				
+		System.out.print("Given year (two digits): ");
+		String year = in.next();
+				
+		int i = 1;
+		while (i <= 7) {
+			String tempDay;
+			if(day < 9) {
+				tempDay = "0" + day;
+			} else {
+				tempDay = "" + day;
+			}
+			String query = "SELECT * FROM TripOffering WHERE DATE LIKE '00"
+					+ month + "-" + tempDay + "-" + year + " 00:00:00' AND DriverName LIKE '" + driverName + "'";
+			sqlDisplayer(query);
+			i++;
+			day++;
+		}
+		in.close();
 	}
 	
 	private static void addDriver() {
