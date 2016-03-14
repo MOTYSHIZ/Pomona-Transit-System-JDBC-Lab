@@ -65,26 +65,86 @@ public class CS435JDBCLab {
 		
 	}
 
-	private static void recordData() {
+	private static void displaySchedule() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	private static void editSchedule() {
+		System.out.println("Schedule Editing Options: ");
+		System.out.println("[1] Delete a trip offering specified by Trip#, Date, and ScheduledStartTime.");
+		System.out.println("[2] Add a set of trip offerings.");
+		System.out.println("[3] Change the driver for a given trip.");
+		System.out.println("[4] Change the bus for a given trip.");
+		
+		Scanner in = new Scanner(System.in);
+		int input = in.nextInt();
+		
+		switch(input) {
+		case 1: deleteTripOffering();
+			break;
+		case 2: addTripOfferings();
+			break;
+		case 3: changeDriver();
+			break;
+		case 4: changeBus();
+			break;
+		default: System.out.println("Invalid input. Try again.");
+			editSchedule();
+			break;
+		}
+		in.close();
+	}
+	
+	private static void deleteTripOffering() {
 		// TODO Auto-generated method stub
 		
 	}
 
-	private static void deleteBus() {
-		String sqlVar;
-		int busID;
-		Scanner in = new Scanner(System.in);
-	
-		System.out.print("BusID: ");	
-		busID = in.nextInt();
-	
-		sqlVar = "DELETE FROM BUS WHERE BusID='" + busID + "';";
-		sqlHandler(sqlVar);
+	private static void addTripOfferings() {
+		// TODO Auto-generated method stub
 		
-		System.out.println("Bus deleted!");
-		in.close();
 	}
 
+	private static void changeDriver() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private static void changeBus() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private static void displayStops() {
+		String query = "SELECT * FROM TripStopInfo";
+		sqlDisplayer(query);
+	}
+	
+	private static void displayWeeklySchedule() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	private static void addDriver() {
+		String driverName;
+		String sqlVar;
+		String driverTelephoneNumber;
+		Scanner in = new Scanner(System.in);
+
+		System.out.print("DriverName: ");	
+		driverName = in.next();
+		
+		System.out.print("DriverTelephoneNumber (Please follow XXX-XXXX format: ");
+		driverTelephoneNumber = in.next();
+		
+		sqlVar = "INSERT INTO DRIVER VALUES('" + driverName + "', '" + driverTelephoneNumber + "');";
+		sqlHandler(sqlVar);
+		
+		System.out.println("Driver added!");
+		in.close();
+	}
+	
 	private static void addBus() {
 		// INSERT INTO 'pomona_transit'.'bus'('BusID', 'Model', 'Year');
 		String model = "NULL";
@@ -108,42 +168,24 @@ public class CS435JDBCLab {
 		System.out.println("Bus added!");
 		in.close();
 	}
-
-	private static void addDriver() {
-		String driverName;
+	
+	
+	private static void deleteBus() {
 		String sqlVar;
-		String driverTelephoneNumber;
+		int busID;
 		Scanner in = new Scanner(System.in);
-
-		System.out.print("DriverName: ");	
-		driverName = in.next();
-		
-		System.out.print("DriverTelephoneNumber (Please follow XXX-XXXX format: ");
-		driverTelephoneNumber = in.next();
-		
-		sqlVar = "INSERT INTO DRIVER VALUES('" + driverName + "', '" + driverTelephoneNumber + "');";
+	
+		System.out.print("BusID: ");	
+		busID = in.nextInt();
+	
+		sqlVar = "DELETE FROM BUS WHERE BusID='" + busID + "';";
 		sqlHandler(sqlVar);
 		
-		System.out.println("Driver added!");
+		System.out.println("Bus deleted!");
 		in.close();
 	}
 
-	private static void displayWeeklySchedule() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private static void displayStops() {
-		String query = "SELECT * FROM TripStopInfo";
-		sqlDisplayer(query);
-	}
-
-	private static void editSchedule() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private static void displaySchedule() {
+	private static void recordData() {
 		// TODO Auto-generated method stub
 		
 	}
