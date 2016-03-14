@@ -146,7 +146,7 @@ public class CS435JDBCLab {
 			} else {
 				tempDay = "" + day;
 			}
-			String query = "SELECT DATE FROM TripOffering WHERE DATE LIKE '00"
+			String query = "SELECT * FROM TripOffering WHERE DATE LIKE '00"
 					+ month + "-" + tempDay + "-" + year + " 00:00:00' AND DriverName LIKE '" + driverName + "'";
 			sqlDisplayer(query);
 			i++;
