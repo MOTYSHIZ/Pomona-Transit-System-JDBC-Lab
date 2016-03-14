@@ -122,13 +122,73 @@ public class CS435JDBCLab {
 	}
 	
 	private static void deleteTripOffering() {
-		// TODO Auto-generated method stub
+		String sqlVar;
+		int tripNumber;
+		String date;
+		String scheduledStartTime;
+		Scanner in = new Scanner(System.in);
+	
+		System.out.print("TripNumber: ");	
+		tripNumber = in.nextInt();
 		
+		System.out.print("Date(Please follow 'YYYY-MM-DD' format): ");	
+		date = in.next();
+		
+		System.out.print("ScheduledStartTime(Please follow 'HH:MM' 24H format): ");	
+		scheduledStartTime = in.next() + ":00";
+	
+		sqlVar = "DELETE FROM TripOffering WHERE "
+				+ "TripNumber='" + tripNumber + "'" 
+				+ " AND Date='" + date + "'"
+				+ " AND ScheduledStartTime='" + scheduledStartTime
+				+"';";
+		sqlHandler(sqlVar);
+		
+		System.out.println("Trip deleted!");
+		in.close();
 	}
 
 	private static void addTripOfferings() {
-		// TODO Auto-generated method stub
+		String sqlVar;
+		int tripNumber;
+		int busID;
+		String date;
+		String scheduledStartTime, scheduledArrivalTime;
+		String driverName;
+		Scanner in = new Scanner(System.in);
+	
+		System.out.print("TripNumber: ");	
+		tripNumber = in.nextInt();
 		
+		System.out.print("Date(Please follow 'YYYY-MM-DD' format): ");	
+		date = in.next();
+		
+		System.out.print("ScheduledStartTime(Please follow 'HH:MM' 24H format): ");	
+		scheduledStartTime = in.next() + ":00";
+		
+		System.out.print("ScheduledArrivalTime(Please follow 'HH:MM' 24H format): ");	
+		scheduledArrivalTime = in.next() + ":00";
+		
+		System.out.print("DriverName: ");	
+		driverName = in.next();
+		
+		System.out.print("BusID: ");	
+		busID = in.nextInt();
+	
+		sqlVar = "INSERT INTO TripOffering VALUES("
+				+ tripNumber + ",'" 
+				+ date + "','" 
+				+ scheduledStartTime + "','"
+				+ scheduledArrivalTime + "','"
+				+ driverName + "',"
+				+ busID
+				+");";
+		sqlHandler(sqlVar);
+		
+		System.out.println("Trip Added! Would you like to add another? ('Y' or 'N')");
+		String input = in.next();
+		if(input.toUpperCase().equals("Y"))addTripOfferings();
+		in.close();
 	}
 
 	private static void changeDriver() {
