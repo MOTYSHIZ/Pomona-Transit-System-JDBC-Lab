@@ -15,8 +15,8 @@ import java.util.Scanner;
 
 public class CS435JDBCLab {
 	
-	private static String dbHost = "localHost";
-	private static String dbName = "world";
+	private static String dbHost = "localhost";
+	private static String dbName = "pomona_transit";
 	private static String dbUser = "JohnCena";
 	
 	
@@ -77,75 +77,45 @@ public class CS435JDBCLab {
 
 	private static void addBus() {
 		// INSERT INTO 'pomona_transit'.'bus'('BusID', 'Model', 'Year') VALUES('5', 'Tour', '2013');
-		int a = 0;
-		String b = "NULL";
-		int c = 0;
-		
-		System.out.println("Add stuff");
+		String model = "NULL";
+		String sqlVar;
+		int busID = 0;
+		int year = 0;
 		Scanner in = new Scanner(System.in);
 
-			a = in.nextInt();
-			c = in.nextInt();
-			b = in.next();
-
+		System.out.print("BusID: ");	
+		busID = in.nextInt();
 		
+		System.out.print("Model: ");	
+		model = in.next();
 		
-		System.out.println("A: " + a);
-		System.out.println("B: " + b);
-		System.out.println("C: " + c);
-		try{
-			//Load the MySQL Connector / J classes
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
-			
-			//Set connect string to local MySQL database, user is JohnCena
-			String connString = "jdbc:mysql://" + dbHost + "/" + dbName + 
-					"?user=" + dbUser + "&password=doot"  + "&useSSL=false";
-			
-			System.out.println("Trying connection with " + connString);
-			Connection conn = DriverManager.getConnection(connString);
-			
-			//Get result set
-			Statement stmt = conn.createStatement();
-			String varSQL = "INSERT INTO BUS VALUES('" + a + "', '" + b + "', '" + c + "');";
-			stmt.executeUpdate(varSQL);
-			
-			
-			/**Can delete beneath this**/
-			String select = "SELECT * FROM BUS";
-			ResultSet rs = stmt.executeQuery(select);
-			//Get meta data on just opened result set
-			ResultSetMetaData rsMeta = rs.getMetaData();
-			
-			// Display Column names as string
-			String varColNames = " ";
-			int varColCount = rsMeta.getColumnCount();
-			for(int col = 1; col <= varColCount;col++){
-				varColNames = varColNames + rsMeta.getColumnName(col)+ " ";
-			}
-			System.out.println(varColNames);
-			
-			//Display column values
-			while(rs.next()){
-				for(int col = 1; col <= varColCount;col++){
-					System.out.print(rs.getString(col) + " ");
-				}
-				System.out.println();
-			}
-			
-			//Clean up
-			rs.close();
-			stmt.close();
-			conn.close();
-			
-		} catch(Exception e){
-			e.printStackTrace();
-		}
+		System.out.print("Year: ");
+		year = in.nextInt();
+		
+		sqlVar = "INSERT INTO BUS VALUES('" + busID + "', '" + model + "', '" + year + "');";
+		sqlHandler(sqlVar);
+		
+		System.out.println("Bus added!");
 		in.close();
 	}
 
 	private static void addDriver() {
-		// TODO Auto-generated method stub
+		String driverName;
+		String sqlVar;
+		String driverTelephoneNumber;
+		Scanner in = new Scanner(System.in);
+
+		System.out.print("DriverName: ");	
+		driverName = in.next();
 		
+		System.out.print("DriverTelephoneNumber: ");
+		driverTelephoneNumber = in.next();
+		
+		sqlVar = "INSERT INTO DRIVER VALUES('" + driverName + "', '" + driverTelephoneNumber + "');";
+		sqlHandler(sqlVar);
+		
+		System.out.println("Driver added!");
+		in.close();
 	}
 
 	private static void displayWeeklySchedule() {
@@ -166,5 +136,55 @@ public class CS435JDBCLab {
 	private static void displaySchedule() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	private static void sqlHandler(String sqlVar){
+		try{
+			//Load the MySQL Connector / J classes
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			
+			//Set connect string to local MySQL database, user is JohnCena
+			String connString = "jdbc:mysql://" + dbHost + "/" + dbName + 
+					"?user=" + dbUser + "&password=doot"  + "&useSSL=false";
+			
+			System.out.println("Trying connection with " + connString);
+			Connection conn = DriverManager.getConnection(connString);
+			
+			//Get result set
+			Statement stmt = conn.createStatement();
+			String varSQL = sqlVar;
+			stmt.executeUpdate(varSQL);
+			
+			
+//			/**Can delete beneath this**/
+//			String select = "SELECT * FROM BUS";
+//			ResultSet rs = stmt.executeQuery(select);
+//			//Get meta data on just opened result set
+//			ResultSetMetaData rsMeta = rs.getMetaData();
+//			
+//			// Display Column names as string
+//			String varColNames = "";
+//			int varColCount = rsMeta.getColumnCount();
+//			for(int col = 1; col <= varColCount;col++){
+//				varColNames = varColNames + rsMeta.getColumnName(col)+ " ";
+//			}
+//			System.out.println(varColNames);
+//			
+//			//Display column values
+//			while(rs.next()){
+//				for(int col = 1; col <= varColCount;col++){
+//					System.out.print(rs.getString(col) + " ");
+//				}
+//				System.out.println();
+//			}
+			
+			//Clean up
+//			rs.close();
+			stmt.close();
+			conn.close();
+			
+		} catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 }
