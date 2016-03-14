@@ -259,8 +259,17 @@ public class CS435JDBCLab {
 	}
 
 	private static void displayStops() {
-		String query = "SELECT * FROM TripStopInfo";
+		String query;
+		int tripNumber;
+		Scanner in = new Scanner(System.in);
+	
+		System.out.print("TripNumber: ");	
+		tripNumber = in.nextInt();
+		
+		query = "SELECT * FROM TripStopInfo WHERE TripNumber=" + tripNumber + ";";
 		sqlDisplayer(query);
+		
+		in.close();
 	}
 	
 	private static void displayWeeklySchedule() {
@@ -441,7 +450,6 @@ public class CS435JDBCLab {
 			
 			stmt.close();
 			conn.close();
-			
 		} catch(Exception e){
 			e.printStackTrace();
 		}
