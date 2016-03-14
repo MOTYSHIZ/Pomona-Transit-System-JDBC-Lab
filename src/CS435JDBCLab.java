@@ -22,8 +22,6 @@ public class CS435JDBCLab {
 	
 	public static void main(String[] args) {
 		menu();
-		
-		System.out.println("end!");
 	}
 	
 	public static void menu() {
@@ -36,11 +34,14 @@ public class CS435JDBCLab {
 		System.out.println("[6] Add a bus");
 		System.out.println("[7] Delete a bus");
 		System.out.println("[8] Record data of a given trip");
+		System.out.println("[0] Exit");
 		
 		Scanner in = new Scanner(System.in);
 		int input = in.nextInt();
 		
 		switch(input) {
+		case 0: System.exit(0);
+			break;
 		case 1: displaySchedule();
 			break;
 		case 2: editSchedule();
@@ -55,19 +56,43 @@ public class CS435JDBCLab {
 			break;
 		case 7: deleteBus();
 			break;
-		case 8: recordData();
+		case 8: recordData();	
 			break;
 		default: System.out.println("Invalid input. Try again.");
 			menu();
 			break;
 		}
 		in.close();
-		
 	}
 
 	private static void displaySchedule() {
-		// TODO Auto-generated method stub
+		//display the schedule of all trips for a given start location, destination
+		//and date. In addition schedule includes schedules start, scheduled arrival,
+		//driver id and bus id.
 		
+		String startLocationName, destination, date;
+		Scanner in = new Scanner(System.in);
+		System.out.print("Start Location Name: ");
+		startLocationName = in.next();
+		
+		System.out.print("Destination Name: ");
+		destination = in.next();
+		
+		System.out.print("Date (YYYY-MM-DD): ");
+		date = in.next();
+		
+		String query;
+		query = "SELECT t.TripNumber, t.StartLocationName, t.DestinationName, o.Date"
+				+ ", o.ScheduledStartTime, o.ScheduledArrivalTime, o.DriverName, "
+				+ "o.BusId "
+				+ "FROM Trip t, TripOffering o "
+				+ "WHERE t.TripNumber = o.TripNumber AND "
+				+ "t.StartLocationName LIKE '" + startLocationName + "' AND "
+				+ "t.DestinationName" + " LIKE '" + destination + "' "+ " AND "
+				+ "o.Date LIKE '" + date + "'";
+		
+		sqlDisplayer(query);
+		in.close();
 	}
 	
 	private static void editSchedule() {
@@ -97,73 +122,13 @@ public class CS435JDBCLab {
 	}
 	
 	private static void deleteTripOffering() {
-		String sqlVar;
-		int tripNumber;
-		String date;
-		String scheduledStartTime;
-		Scanner in = new Scanner(System.in);
-	
-		System.out.print("TripNumber: ");	
-		tripNumber = in.nextInt();
+		// TODO Auto-generated method stub
 		
-		System.out.print("Date(Please follow 'YYYY-MM-DD' format): ");	
-		date = in.next();
-		
-		System.out.print("ScheduledStartTime(Please follow 'HH:MM' 24H format): ");	
-		scheduledStartTime = in.next() + ":00";
-	
-		sqlVar = "DELETE FROM TripOffering WHERE "
-				+ "TripNumber='" + tripNumber + "'" 
-				+ " AND Date='" + date + "'"
-				+ " AND ScheduledStartTime='" + scheduledStartTime
-				+"';";
-		sqlHandler(sqlVar);
-		
-		System.out.println("Trip deleted!");
-		in.close();
 	}
 
 	private static void addTripOfferings() {
-		String sqlVar;
-		int tripNumber;
-		int busID;
-		String date;
-		String scheduledStartTime, scheduledArrivalTime;
-		String driverName;
-		Scanner in = new Scanner(System.in);
-	
-		System.out.print("TripNumber: ");	
-		tripNumber = in.nextInt();
+		// TODO Auto-generated method stub
 		
-		System.out.print("Date(Please follow 'YYYY-MM-DD' format): ");	
-		date = in.next();
-		
-		System.out.print("ScheduledStartTime(Please follow 'HH:MM' 24H format): ");	
-		scheduledStartTime = in.next() + ":00";
-		
-		System.out.print("ScheduledArrivalTime(Please follow 'HH:MM' 24H format): ");	
-		scheduledArrivalTime = in.next() + ":00";
-		
-		System.out.print("DriverName: ");	
-		driverName = in.next();
-		
-		System.out.print("BusID: ");	
-		busID = in.nextInt();
-	
-		sqlVar = "INSERT INTO TripOffering VALUES("
-				+ tripNumber + ",'" 
-				+ date + "','" 
-				+ scheduledStartTime + "','"
-				+ scheduledArrivalTime + "','"
-				+ driverName + "',"
-				+ busID
-				+");";
-		sqlHandler(sqlVar);
-		
-		System.out.println("Trip Added! Would you like to add another? ('Y' or 'N')");
-		String input = in.next();
-		if(input.toUpperCase().equals("Y"))addTripOfferings();
-		in.close();
 	}
 
 	private static void changeDriver() {
@@ -207,7 +172,7 @@ public class CS435JDBCLab {
 				tempDay = "" + day;
 			}
 			String query = "SELECT * FROM TripOffering WHERE DATE LIKE '00"
-					+ month + "-" + tempDay + "-" + year + " 00:00:00' AND DriverName LIKE '" + driverName + "'";
+					+ month + "-" + tempDay + "-" + year + "' AND DriverName LIKE '" + driverName + "'";
 			sqlDisplayer(query);
 			i++;
 			day++;
@@ -275,8 +240,70 @@ public class CS435JDBCLab {
 	}
 
 	private static void recordData() {
-		// TODO Auto-generated method stub
+		// insert the actual data of a given trip offering specified by its key. 
+		//the actual data include the attributes of the table actual trip stop info
 		
+		
+		int tripNumber;
+		String date;
+		String scheduledStartTime;
+		Scanner in = new Scanner(System.in);
+		
+		System.out.print("TripNumber: ");
+		tripNumber = in.nextInt();
+		
+		System.out.print("Date (YYYY-MM-DD): ");
+		date = in.next();
+		
+		System.out.print("ScheduledStartTime (HH:MM:SS): ");
+		scheduledStartTime = in.next();
+		
+		String scheduledArrival = "";
+		String stopNumber = "";
+		String query;
+		
+		//get scheduledArrival
+		query = "SELECT o.scheduledArrivalTime, t.StopNumber FROM TripOffering o, "
+				+ " TripStopInfo t WHERE t.TripNumber = o.TripNumber AND t.TripNumber =" + 
+				tripNumber + " AND DATE LIKE '" + date + "' AND ScheduledStartTime LIKE '"
+				+ scheduledStartTime + "'";
+		
+		//gets the scheduledArrival and stopNumber
+		try{
+			//Load the MySQL Connector / J classes
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			
+			//Set connect string to local MySQL database, user is JohnCena
+			String connString = "jdbc:mysql://" + dbHost + "/" + dbName + 
+					"?user=" + dbUser + "&password=doot"  + "&useSSL=false";
+			
+			Connection conn = DriverManager.getConnection(connString);
+			Statement stmt = conn.createStatement();
+
+			ResultSet rs = stmt.executeQuery(query);
+			
+			//Display column values
+			while(rs.next()){
+				scheduledArrival = rs.getString(1);
+				stopNumber = rs.getString(2);
+			}
+			
+			//Clean up
+			rs.close();
+			conn.close();			
+		} catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		//insert into actualtripstopinfo
+		String sqlVar = "INSERT INTO ActualTripStopInfo (TripNumber, "
+				+ "Date, ScheduledStartTime, StopNumber, ScheduledArrivalTime) "
+				+ "VALUES ('" + tripNumber + "', '" + date + "', '"
+				+ scheduledStartTime + "', '" + stopNumber + "', '" 
+				+ scheduledArrival + "')";
+		
+		sqlHandler(sqlVar);
+		in.close();
 	}
 	
 	private static void sqlHandler(String sqlVar){
