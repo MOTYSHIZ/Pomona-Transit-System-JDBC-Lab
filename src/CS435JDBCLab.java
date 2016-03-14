@@ -97,8 +97,30 @@ public class CS435JDBCLab {
 	}
 	
 	private static void deleteTripOffering() {
-		// TODO Auto-generated method stub
+		String sqlVar;
+		int tripNumber;
+		String date;
+		String scheduledStartTime;
+		Scanner in = new Scanner(System.in);
+	
+		System.out.print("TripNumber: ");	
+		tripNumber = in.nextInt();
 		
+		System.out.print("Date(Please follow 'YYYY-MM-DD' format): ");	
+		date = in.next();
+		
+		System.out.print("ScheduledStartTime(Please follow 'HH:MM' 24H format): ");	
+		scheduledStartTime = in.next() + ":00";
+	
+		sqlVar = "DELETE FROM TripOffering WHERE "
+				+ "TripNumber='" + tripNumber + "'" 
+				+ " AND Date='" + date + "'"
+				+ " AND ScheduledStartTime='" + scheduledStartTime
+				+"';";
+		sqlHandler(sqlVar);
+		
+		System.out.println("Trip deleted!");
+		in.close();
 	}
 
 	private static void addTripOfferings() {
